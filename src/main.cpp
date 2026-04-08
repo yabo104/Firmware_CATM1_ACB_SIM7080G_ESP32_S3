@@ -233,7 +233,7 @@ void go_to_deep_sleep() {
     esp_sleep_enable_timer_wakeup(sleep_time_us);
 
     // Wakeup por Hall Sensor (GPIO 1)
-    esp_deep_sleep_enable_gpio_wakeup(1 << HALL_PIN, ESP_GPIO_WAKEUP_GPIO_LOW);
+    esp_sleep_enable_ext0_wakeup((gpio_num_t)HALL_PIN, 0);
 
     Serial.flush();
     esp_deep_sleep_start();

@@ -75,6 +75,10 @@ void setup() {
     modem.setNetworkMode(38); // LTE only
     modem.setPreferredMode(1); // CAT-M
 
+    LOG_SERIAL_PRINTLN("[ DEBUG ] Evaluando Fuerza de Señal Bruta (CSQ)...");
+    int csq = modem.getSignalQuality();
+    LOG_SERIAL_PRINTF("[ DEBUG ] Nivel de señal RF (0-31): %d\n", csq);
+
     LOG_SERIAL_PRINT("Waiting for network ... ");
     if (!modem.waitForNetwork(120000L)) {
         LOG_SERIAL_PRINTLN("timeout");

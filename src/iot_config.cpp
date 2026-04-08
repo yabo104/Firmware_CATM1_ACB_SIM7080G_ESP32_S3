@@ -1,7 +1,7 @@
 #include "iot_config.h"
 
 bool app_debug_enabled = true;   // Logs de la aplicación
-bool at_debug_enabled  = false;  // Tráfico AT puro — desactivado (comunicación verificada)
+bool at_debug_enabled  = true;   // Tráfico AT puro — activado para depuración de red celular
 
 // ── Variables de Configuración Globales ─────────────────────────────────────
 

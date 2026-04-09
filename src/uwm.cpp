@@ -4,9 +4,12 @@
 // Comandos fijos (Modbus RTU)
 static const uint8_t acc_command[8] = {0x00, 0x03, 0x00, 0x00, 0x00, 0x09, 0x84, 0x1D};
 
+// Usar Serial2 ya que Serial0 puede tener conflictos internos de matriz (UART0) en recepción
+HardwareSerial RS485Serial(2);
+
 bool dgm_init() {
-    // Inicializar UART0 (Pins 20, 21 por defecto en C3)
-    Serial0.begin(9600, SERIAL_8N1, DGMC_RX, DGMC_TX);
+    // Inicializar UART2
+    RS485Serial.begin(9600, SERIAL_8N1, DGMC_RX, DGMC_TX);
     return true;
 }
 
@@ -16,26 +19,30 @@ bool dgm_read(MeterData &data, uint32_t timeout_ms) {
     data.valid = false;
 
     // Limpiar buffer de entrada
-    while (Serial0.available() > 0) Serial0.read();
+    while (RS485Serial.available() > 0) RS485Serial.read();
 
     // Transmitir comando
     digitalWrite(RS485_EN, HIGH); // Habilitar TX
-    delay(5);
-    Serial0.write(acc_command, 8);
-    Serial0.flush(); // Esperar a que se envíe todo
-    delay(5);
-    digitalWrite(RS485_EN, LOW); // Habilitar RX
+    delay(2); // Pequeño margen para que el transceptor se asiente
+    RS485Serial.write(acc_command, 8);
+    RS485Serial.flush(); // Esperar a que se envíe el último byte
+    delay(2); // Retardo ultra-corto (1-2ms) para asegurar que el bit de PAUSA / Stop Bit físico salio completamente de A/B
+
+    // Cambio MUY RÁPIDO a RX para no perder el primer byte del medidor
+    digitalWrite(RS485_EN, LOW); // Habilitar RX inmediatamente
 
     // Leer respuesta
     uint32_t startTime = millis();
     uint8_t index = 0;
     while (millis() - startTime < timeout_ms && index < 23) {
-        if (Serial0.available() > 0) {
-            dgrx[index++] = Serial0.read();
+        if (RS485Serial.available() > 0) {
+            dgrx[index++] = RS485Serial.read();
         }
     }
 
     // Verificar respuesta
+    LOG_SERIAL_PRINTF("[ UWM ] Index size: %d\n", index);
+    
     if (index < 23) {
         LOG_SERIAL_PRINTLN("[ UWM ] Error: Timeout o trama incompleta.");
         return false;

@@ -46,9 +46,11 @@ void setup() {
 
     // 4. Lectura del Medidor RS485 (Protocolo Propio)
     read_meter_data();
+    LOG_SERIAL_PRINTF("[ INFO ] Lectura del medidor: %d m3\n", (uint32_t)currentMeterData.accFlow);
     // Liberar UART RS485 para ahorrar energía
-    Serial0.end();
-    delay(500);
+    extern HardwareSerial RS485Serial;
+    RS485Serial.end();
+    delay(100);
 
     // 4. UART al SIM7080G (ESPC_TX=8, ESPC_RX=10)
     Serial1.begin(115200, SERIAL_8N1, PIN_RX, PIN_TX);

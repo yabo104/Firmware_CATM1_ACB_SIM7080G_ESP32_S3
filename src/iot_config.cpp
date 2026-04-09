@@ -9,7 +9,7 @@ bool at_debug_enabled  = true;   // Tráfico AT puro — activado para depuraci�
 const char* server_name = "wsp.acueducto.com.co";
 const int   server_port = 443;
 const bool  use_ssl     = true;
-const char* apn         = "alai";
+const char* apn         = "iot.1nce.net"; // alai
 
 // Credenciales HTTP
 const char* http_user_name = "cofemetrex";

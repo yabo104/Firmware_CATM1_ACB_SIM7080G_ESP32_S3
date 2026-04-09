@@ -43,13 +43,13 @@ extern String meterDateTimeTest;  // Fecha/hora del medidor en ISO 8601 ("" = ti
 #define PIN_RX      18  // ESPC_RX
 
 // Control de energía del módulo SIM7080G
-#define CAT_EN      16  // CAT_EN
-#define PWRKEY_PIN  15  // CAT_KEY
+#define CAT_EN      15  // CAT_EN
+#define PWRKEY_PIN  16  // CAT_KEY
 
 // RS485 / Medidor Digital (UART2)
 #define DGMC_TX     10
-#define DGMC_RX     11
-#define RS485_EN    12
+#define DGMC_RX     12
+#define RS485_EN    11
 
 // Periféricos y Sensores
 #define HALL_PIN        1   // Sensor de Efecto Hall (Wake-up)
